@@ -1,8 +1,8 @@
 const canvas = document.querySelector('.myCanvas');
 //const width = canvas.width = window.innerWidth;
 //const height = canvas.height = window.innerHeight;
-const width = 600;
-const height = 600;
+const width = canvas.width = 600;
+const height = canvas.height = 600;
 const ctx = canvas.getContext('2d');
 
 const spaces = [[0,0],[width/3,0],[width/3*2,0],
@@ -28,9 +28,11 @@ function drawBoard() {
   ctx.lineTo(width,height/3*2);
   ctx.stroke();
 }
+
 function clearBoard() {
   ctx.clearRect(0,0,width,height);
 }
+
 function drawX(arr) {
   img = new Image();
   img.src = 'https://2.bp.blogspot.com/-44FEkFGb5h8/Ux3Ul5ly3LI/AAAAAAAAEGU/jl4_ktKNJp0/s1600/playX.png';
