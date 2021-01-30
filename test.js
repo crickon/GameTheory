@@ -1,1 +1,2 @@
 // tests
+console.log("test");
