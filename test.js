@@ -1,5 +1,7 @@
 //practice
+const another = require('./anothertest.js');
 
+console.log(another.pow(2,2));
 // variables and arithmetic
 var x, y, z;    // Statement 1
 x = 5;          // Statement 2
@@ -11,15 +13,11 @@ var a = "1";
 var b = 1;
 var c = 4+16+"string";
 
-
-
 function addEmUp(x, y) {
   return x+y;
 }
 //arrays
 var cars = ["volvo", "honda", "toyota"];
-console.log(cars)
-
 
 //objects
 var board = {
@@ -37,7 +35,7 @@ function boardToString(board){
 console.log(boardToString(board));
 
 //strings
-var word = 'elephant'
+var word = 'elephant';
 console.log(word.length);
 
 var long = 'super long string that i want on \
