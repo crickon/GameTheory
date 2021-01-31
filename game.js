@@ -12,11 +12,22 @@ class Board {
     this.player1 = player1;
     this.player2 = player2;
     this.legalMoves = [];
+    this.moves = [];
     this.getLegalMoves();
+  }
+
+  makeCopy() {
+    var newBoard = new Board(this.player1, this.player2);
+    for (var i = 0; i < this.moves.length; i++) {
+      var currentMove = this.moves[i];
+      newBoard.placeMark(currentMove[0], currentMove[1], currentMove[2]);
+    }
+    return newBoard;
   }
 
   placeMark(player, x, y) {
     this.board[x][y] = player.mark;
+    this.moves.push([player, x, y]);
     this.getLegalMoves();
   }
 
@@ -76,16 +87,10 @@ class Board {
     //check diagonals
     var diag1 = this.board[0][0] + this.board[1][1] + this.board[2][2];
     var diag2 = this.board[2][0] + this.board[1][1] + this.board[0][2];
-    if (diag1 == player1Win) {
+    if (diag1 == player1Win || diag2 == player1Win) {
       return 'Player 1';
     }
-    else if (diag1 == player2Win) {
-      return 'Player 2';
-    }
-    if (diag2 == player1Win) {
-      return 'Player 1';
-    }
-    else if (diag2 == player2Win) {
+    else if (diag1 == player2Win || diag2 == player2Win) {
       return 'Player 2';
     }
     return 'Tie';
@@ -103,9 +108,25 @@ class RandomBot {
   }
 }
 
-class oneLayerBot {
-  constructor(player, board) {
+class OneLayerBot extends RandomBot{
+  constructor(player) {
+    super(player);
+  }
 
+  trySpot(arr, board) {
+    var newBoard = board.makeCopy();
+    newBoard.placeMark(this.player, arr[0], arr[1]);
+    return (newBoard.checkForWinner() != 'Tie' ? true : false);
+  }
+
+  selectMove(board) {
+    var possibleMoves = board.getLegalMoves();
+    for (var i = 0; i < possibleMoves.length; i++) {
+      if (this.trySpot(possibleMoves[i], board)) {
+        return possibleMoves[i];
+      }
+    }
+    return super.selectMove(board);
   }
 }
 
@@ -116,7 +137,7 @@ function createGame() {
 
 
   var bot1 = new RandomBot(player1);
-  var bot2 = new RandomBot(player2);
+  var bot2 = new OneLayerBot(player2);
 
   console.log(board.printBoard());
   var count = 0;
@@ -134,16 +155,45 @@ function createGame() {
     console.log(board.printBoard());
     count++;
   }
-  console.log(board.checkForWinner());
+  return board.checkForWinner();
 }
 
-createGame();
+console.log(createGame());
 
 // var player1 = new Player('x');
 // var player2 = new Player('o');
 // var board = new Board(player1, player2);
 //
-// board.placeMark(player1, 0,1);
-// board.placeMark(player1, 1,1);
-// board.placeMark(player1, 2,1);
-// console.log(board.checkForWinner());
+// var randomBot = new RandomBot(player1);
+// var oneLayerBot = new OneLayerBot(player2);
+//
+// var move1 = randomBot.selectMove(board);
+// board.placeMark(player1, move1[0], move1[1]);
+// console.log(move1);
+// console.log(board.printBoard());
+//
+//
+// var move2 = oneLayerBot.selectMove(board);
+// board.placeMark(player2, move2[0], move2[1]);
+// console.log(move2);
+// console.log(board.printBoard());
+//
+// var move3 = randomBot.selectMove(board);
+// board.placeMark(player1, move3[0], move3[1]);
+// console.log(move3);
+// console.log(board.printBoard());
+//
+// var move4 = oneLayerBot.selectMove(board);
+// board.placeMark(player2, move4[0], move4[1]);
+// console.log(move4);
+// console.log(board.printBoard());
+//
+// var move5 = randomBot.selectMove(board);
+// board.placeMark(player1, move5[0], move3[1]);
+// console.log(move5);
+// console.log(board.printBoard());
+//
+// var move6 = oneLayerBot.selectMove(board);
+// board.placeMark(player2, move6[0], move4[1]);
+// console.log(move6);
+// console.log(board.printBoard());
